@@ -800,6 +800,8 @@ export function attach(
       canEditFunctionPropsDeletePaths: false,
       canEditFunctionPropsRenamePaths: false,
 
+      canToggleError: false,
+
       // Suspense did not exist in legacy versions
       canToggleSuspense: false,
 

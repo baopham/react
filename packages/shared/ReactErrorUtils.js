@@ -18,7 +18,7 @@ let caughtError: mixed = null;
 let hasRethrowError: boolean = false;
 let rethrowError: mixed = null;
 
-const reporter = {
+export const reporter = {
   onError(error: mixed) {
     hasError = true;
     caughtError = error;

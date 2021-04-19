@@ -18,6 +18,7 @@ import ReactNativeWeb from './ReactNativeWeb';
 import ToDoList from './ToDoList';
 import Toggle from './Toggle';
 import SuspenseTree from './SuspenseTree';
+import ErrorBoundaries from './ErrorBoundaries';
 import {ignoreErrors, ignoreWarnings} from './console';
 
 import './styles.css';
@@ -46,17 +47,18 @@ function mountHelper(App) {
 }
 
 function mountTestApp() {
-  mountHelper(ToDoList);
-  mountHelper(InspectableElements);
-  mountHelper(Hydration);
-  mountHelper(ElementTypes);
-  mountHelper(EditableProps);
-  mountHelper(InlineWarnings);
-  mountHelper(ReactNativeWeb);
-  mountHelper(Toggle);
-  mountHelper(SuspenseTree);
-  mountHelper(DeeplyNestedComponents);
-  mountHelper(Iframe);
+  // mountHelper(ToDoList);
+  // mountHelper(InspectableElements);
+  // mountHelper(Hydration);
+  // mountHelper(ElementTypes);
+  // mountHelper(EditableProps);
+  // mountHelper(InlineWarnings);
+  // mountHelper(ReactNativeWeb);
+  // mountHelper(Toggle);
+  // mountHelper(SuspenseTree);
+  // mountHelper(DeeplyNestedComponents);
+  // mountHelper(Iframe);
+  mountHelper(ErrorBoundaries);
 }
 
 function unmountTestApp() {

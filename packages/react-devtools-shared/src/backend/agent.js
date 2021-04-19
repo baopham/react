@@ -128,6 +128,12 @@ type OverrideSuspenseParams = {|
   forceFallback: boolean,
 |};
 
+type OverrideErrorParams = {|
+  id: number,
+  rendererID: number,
+  forceError: boolean,
+|};
+
 type PersistedSelection = {|
   rendererID: number,
   path: Array<PathFrame>,
@@ -184,6 +190,7 @@ export default class Agent extends EventEmitter<{|
     bridge.addListener('inspectElement', this.inspectElement);
     bridge.addListener('logElementToConsole', this.logElementToConsole);
     bridge.addListener('overrideSuspense', this.overrideSuspense);
+    bridge.addListener('overrideError', this.overrideError);
     bridge.addListener('overrideValueAtPath', this.overrideValueAtPath);
     bridge.addListener('reloadAndProfile', this.reloadAndProfile);
     bridge.addListener('renamePath', this.renamePath);
@@ -391,6 +398,19 @@ export default class Agent extends EventEmitter<{|
       console.warn(`Invalid renderer id "${rendererID}" for element "${id}"`);
     } else {
       renderer.overrideSuspense(id, forceFallback);
+    }
+  };
+
+  overrideError = ({
+    id,
+    rendererID,
+    forceError,
+  }: OverrideErrorParams) => {
+    const renderer = this._rendererInterfaces[rendererID];
+    if (renderer == null) {
+      console.warn(`Invalid renderer id "${rendererID}" for element "${id}"`);
+    } else {
+      renderer.overrideError(id, forceError);
     }
   };
 

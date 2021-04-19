@@ -76,6 +76,9 @@ export type InspectedElement = {|
   canEditFunctionPropsDeletePaths: boolean,
   canEditFunctionPropsRenamePaths: boolean,
 
+  // Is this Error, and can its value be overridden now?
+  canToggleError: boolean,
+
   // Is this Suspense, and can its value be overridden now?
   canToggleSuspense: boolean,
 

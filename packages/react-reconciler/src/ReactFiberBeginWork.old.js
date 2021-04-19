@@ -141,7 +141,7 @@ import {
   isPrimaryRenderer,
 } from './ReactFiberHostConfig';
 import type {SuspenseInstance} from './ReactFiberHostConfig';
-import {shouldSuspend} from './ReactFiberReconciler';
+import {shouldError, shouldSuspend} from './ReactFiberReconciler';
 import {pushHostContext, pushHostContainer} from './ReactFiberHostContext.old';
 import {
   suspenseStackCursor,
@@ -947,6 +947,11 @@ function updateClassComponent(
   renderLanes: Lanes,
 ) {
   if (__DEV__) {
+    // This is used by DevTools to force a boundary to error.
+    if (shouldError(workInProgress)) {
+      workInProgress.flags |= DidCapture;
+    }
+
     if (workInProgress.type !== workInProgress.elementType) {
       // Lazy component props can't be validated in createElement
       // because they're only guaranteed to be resolved here.

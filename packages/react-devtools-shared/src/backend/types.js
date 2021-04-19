@@ -130,6 +130,7 @@ export type ReactRenderer = {
   ) => void,
   // 16.9+
   scheduleUpdate?: ?(fiber: Object) => void,
+  setErrorHandler?: ?(shouldError: (fiber: Object) => boolean) => void,
   setSuspenseHandler?: ?(shouldSuspend: (fiber: Object) => boolean) => void,
   // Only injected by React v16.8+ in order to support hooks inspection.
   currentDispatcherRef?: CurrentDispatcherRef,
@@ -223,6 +224,10 @@ export type InspectedElement = {|
   canEditHooksAndRenamePaths: boolean,
   canEditFunctionPropsDeletePaths: boolean,
   canEditFunctionPropsRenamePaths: boolean,
+
+  // Is this Error, and can its value be overridden now?
+  canToggleError: boolean,
+  isErrored: boolean,
 
   // Is this Suspense, and can its value be overridden now?
   canToggleSuspense: boolean,

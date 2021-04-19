@@ -70,6 +70,9 @@ export default function ButtonIcon({className = '', type}: Props) {
     case 'down':
       pathData = PATH_DOWN;
       break;
+    case 'error':
+      pathData = PATH_ERROR;
+      break;
     case 'expanded':
       pathData = PATH_EXPANDED;
       break;
@@ -171,6 +174,8 @@ const PATH_DELETE = `
 
 const PATH_DOWN = 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z';
 
+const PATH_ERROR = 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z';
+
 const PATH_EXPANDED = 'M7 10l5 5 5-5z';
 
 const PATH_EXPORT = 'M15.82,2.14v7H21l-9,9L3,9.18H8.18v-7ZM3,20.13H21v1.73H3Z';
@@ -187,7 +192,7 @@ const PATH_LOG_DATA = `
 `;
 
 const PATH_MORE = `
-  M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 
+  M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9
   2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z
 `;
 
