@@ -125,10 +125,11 @@ export default function InspectedElementWrapper(_: Props) {
     // If we didn't find an error boundary ancestor, we can't throw.
     // Instead we can show a warning to the user.
     if (nearestErrorBoundary === null) {
+      // TODO: (baopham) update canToggleError (auto detect if there's an eligible parent) such that we don't need this modal
       modalDialogDispatch({
         type: 'SHOW',
         content: <CannotThrowWarningMessage />,
-      })
+      });
     } else {
       const nearestErrorBoundaryID = nearestErrorBoundary.id;
 

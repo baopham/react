@@ -70,6 +70,7 @@ import {
   ChildDeletion,
   ForceUpdateForLegacySuspense,
   StaticMask,
+  ShouldCapture,
 } from './ReactFiberFlags';
 import ReactSharedInternals from 'shared/ReactSharedInternals';
 import {
@@ -111,6 +112,7 @@ import {
   processUpdateQueue,
   cloneUpdateQueue,
   initializeUpdateQueue,
+  enqueueCapturedUpdate,
 } from './ReactUpdateQueue.old';
 import {
   NoLane,
@@ -125,6 +127,7 @@ import {
   removeLanes,
   mergeLanes,
   getBumpedLaneForHydration,
+  pickArbitraryLane,
 } from './ReactFiberLane.old';
 import {
   ConcurrentMode,
@@ -220,6 +223,10 @@ import {
   getOffscreenDeferredCachePool,
 } from './ReactFiberCacheComponent.old';
 import is from 'shared/objectIs';
+import {reporter as errorReporter} from 'shared/ReactErrorUtils';
+import {
+  createClassErrorUpdate,
+} from './ReactFiberThrow.old';
 
 import {disableLogs, reenableLogs} from 'shared/ConsolePatchingDev';
 
@@ -950,6 +957,17 @@ function updateClassComponent(
     // This is used by DevTools to force a boundary to error.
     if (shouldError(workInProgress)) {
       workInProgress.flags |= DidCapture;
+      workInProgress.flags |= ShouldCapture;
+      const errorInfo = new Error('Simulated error coming from DevTools');
+      const lane = pickArbitraryLane(renderLanes);
+      workInProgress.lanes = mergeLanes(workInProgress.lanes, lane);
+      // Schedule the error boundary to re-render using updated state
+      const update = createClassErrorUpdate(
+        workInProgress,
+        errorInfo,
+        lane,
+      );
+      enqueueCapturedUpdate(workInProgress, update);
     }
 
     if (workInProgress.type !== workInProgress.elementType) {
