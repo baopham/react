@@ -149,6 +149,13 @@ export default function InspectedElementWrapper(_: Props) {
           rendererID,
           forceError: !isErrored,
         });
+
+        if (isErrored) {
+          bridge.send('clearErrorsForFiberID', {
+            id: nearestErrorBoundaryID,
+            rendererID,
+          });
+        }
       }
     }
   }, [bridge, dispatch, element, isErrored, modalDialogDispatch, store]);
