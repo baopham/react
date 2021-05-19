@@ -3581,14 +3581,26 @@ export function attach(
   // React will switch between these implementations depending on whether
   // we have any manually suspended/errored-out Fibers or not.
 
-  function shouldErrorFiberAlwaysFalse() {
-    return false;
+  function shouldErrorFiberAlwaysNull() {
+    return null;
   }
 
-  let forceErrorForFiberIDs = new Set();
-  function shouldErrorFiberAccordingToSet(fiber) {
+  let forceErrorForFiberIDs = new Map();
+  function shouldErrorFiberAccordingToMap(fiber) {
     const id = getFiberID(getPrimaryFiber(((fiber: any): Fiber)));
-    return forceErrorForFiberIDs.has(id);
+    let status = null;
+    if (forceErrorForFiberIDs.has(id)) {
+      status = forceErrorForFiberIDs.get(id);
+      if (status === false) {
+        forceErrorForFiberIDs.delete(id);
+      }
+
+      if (forceErrorForFiberIDs.size === 0) {
+        // Last override is gone. Switch React back to fast path.
+        setErrorHandler(shouldErrorFiberAlwaysNull);
+      }
+    }
+    return status;
   }
 
   function overrideError(id, forceError) {
@@ -3600,19 +3612,14 @@ export function attach(
         'Expected overrideError() to not get called for earlier React versions.',
       );
     }
-    if (forceError) {
-      forceErrorForFiberIDs.add(id);
-      if (forceErrorForFiberIDs.size === 1) {
-        // First override is added. Switch React to slower path.
-        setErrorHandler(shouldErrorFiberAccordingToSet);
-      }
-    } else {
-      forceErrorForFiberIDs.delete(id);
-      if (forceErrorForFiberIDs.size === 0) {
-        // Last override is gone. Switch React back to fast path.
-        setErrorHandler(shouldErrorFiberAlwaysFalse);
-      }
+
+    forceErrorForFiberIDs.set(id, forceError);
+
+    if (forceErrorForFiberIDs.size === 1) {
+      // First override is added. Switch React to slower path.
+      setErrorHandler(shouldErrorFiberAccordingToMap);
     }
+
     const fiber = idToFiberMap.get(id);
     if (fiber != null) {
       scheduleUpdate(fiber);

@@ -463,7 +463,7 @@ export function findHostInstanceWithNoPortals(
   return hostFiber.stateNode;
 }
 
-let shouldErrorImpl = fiber => false;
+let shouldErrorImpl = fiber => null;
 
 export function shouldError(fiber: Fiber): boolean {
   return shouldErrorImpl(fiber);

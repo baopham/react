@@ -227,6 +227,9 @@ import {reporter as errorReporter} from 'shared/ReactErrorUtils';
 import {
   createClassErrorUpdate,
 } from './ReactFiberThrow.old';
+import {
+  getStackByFiberInDevAndProd
+} from './ReactFiberComponentStack';
 
 import {disableLogs, reenableLogs} from 'shared/ConsolePatchingDev';
 
@@ -955,19 +958,31 @@ function updateClassComponent(
 ) {
   if (__DEV__) {
     // This is used by DevTools to force a boundary to error.
-    if (shouldError(workInProgress)) {
-      workInProgress.flags |= DidCapture;
-      workInProgress.flags |= ShouldCapture;
-      const errorInfo = new Error('Simulated error coming from DevTools');
-      const lane = pickArbitraryLane(renderLanes);
-      workInProgress.lanes = mergeLanes(workInProgress.lanes, lane);
-      // Schedule the error boundary to re-render using updated state
-      const update = createClassErrorUpdate(
-        workInProgress,
-        errorInfo,
-        lane,
-      );
-      enqueueCapturedUpdate(workInProgress, update);
+    switch (shouldError(workInProgress)) {
+      case false: {
+        const instance = workInProgress.stateNode;
+        const ctor = workInProgress.type;
+        const tempInstance = new ctor(workInProgress.memoizedProps, instance.context);
+        const state = tempInstance.state;
+        instance.updater.enqueueReplaceState(instance, state, null);
+        break;
+      }
+      case true: {
+        workInProgress.flags |= DidCapture;
+        workInProgress.flags |= ShouldCapture;
+        const errorInfo = new Error('Simulated error coming from DevTools');
+        errorInfo.stack = getStackByFiberInDevAndProd(current);
+        const lane = pickArbitraryLane(renderLanes);
+        workInProgress.lanes = mergeLanes(workInProgress.lanes, lane);
+        // Schedule the error boundary to re-render using updated state
+        const update = createClassErrorUpdate(
+          workInProgress,
+          errorInfo,
+          lane,
+        );
+        enqueueCapturedUpdate(workInProgress, update);
+        break;
+      }
     }
 
     if (workInProgress.type !== workInProgress.elementType) {

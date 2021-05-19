@@ -11,59 +11,58 @@ import * as React from 'react';
 import {Fragment} from 'react';
 
 class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  state = { hasError: false };
 
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
-    //
-  }
-
   render() {
-    console.log('ErrorBoundary!!!!', this.state);
-    if (this.state.hasError) {
-      return <strong style={{color:'red'}}>Something went wrong.</strong>;
+    const {error, hasError} = this.state;
+    if (hasError) {
+      return (
+        <div style={{
+          color: 'red',
+          border: '1px solid red',
+          borderRadius: '0.25rem',
+          margin: '0.5rem',
+          padding: '0.5rem',
+        }}>
+          An error was thrown.
+        </div>
+      );
     }
 
-    return this.props.children;
+    const {children} = this.props;
+    return (
+      <div style={{
+        border: '1px solid gray',
+        borderRadius: '0.25rem',
+        margin: '0.5rem',
+        padding: '0.5rem',
+      }}>
+        {children}
+      </div>
+    );
   }
 }
 
-function Bomb() {
-  throw new Error('💥 CABOOM 💥');
-}
-
-function ComponentThatMayError(props) {
+function Component({ label }) {
   return (
-    <div>
-      <p>Component that may error</p>
-      {!!props.hasBomb && <Bomb />}
-    </div>
+    <div>{label}</div>
   );
 }
 
 export default function ErrorBoundaries() {
   return (
     <Fragment>
-      <h1>Error Boundaries</h1>
-      <Fragment>
-        <h3>No initial error</h3>
+      <h1>Nested error boundaries demo</h1>
+      <ErrorBoundary>
+        <Component label="Outer component" />
         <ErrorBoundary>
-          <ComponentThatMayError hasBomb={false} />
+          <Component label="Inner component" />
         </ErrorBoundary>
-      </Fragment>
-      {/* <Fragment> */}
-      {/*   <h3>Has initial error</h3> */}
-      {/*   <ErrorBoundary> */}
-      {/*     <ComponentThatMayError hasBomb={true} /> */}
-      {/*   </ErrorBoundary> */}
-      {/* </Fragment> */}
+      </ErrorBoundary>
     </Fragment>
   );
 }
-
