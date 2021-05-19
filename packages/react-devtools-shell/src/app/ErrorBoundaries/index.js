@@ -63,6 +63,9 @@ export default function ErrorBoundaries() {
           <Component label="Inner component" />
         </ErrorBoundary>
       </ErrorBoundary>
+      <ErrorBoundary>
+        <Component label="Neighbour component" />
+      </ErrorBoundary>
     </Fragment>
   );
 }

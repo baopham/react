@@ -971,7 +971,7 @@ function updateClassComponent(
         workInProgress.flags |= DidCapture;
         workInProgress.flags |= ShouldCapture;
         const errorInfo = new Error('Simulated error coming from DevTools');
-        errorInfo.stack = getStackByFiberInDevAndProd(current);
+        errorInfo.stack = getStackByFiberInDevAndProd(workInProgress);
         const lane = pickArbitraryLane(renderLanes);
         workInProgress.lanes = mergeLanes(workInProgress.lanes, lane);
         // Schedule the error boundary to re-render using updated state

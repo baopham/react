@@ -2883,7 +2883,7 @@ export function attach(
 
     const errors = fiberToErrorsMap.get(id) || new Map();
     const warnings = fiberToWarningsMap.get(id) || new Map();
-    const isErrored = (fiber.flags & DidCapture) !== NoFlags;
+    const isErrored = (fiber.flags & DidCapture) !== NoFlags || forceErrorForFiberIDs.get(id) === true;
 
     return {
       id,
@@ -2908,7 +2908,7 @@ export function attach(
         (!isErrored ||
           // If it's showing an error state because we previously forced it to,
           // allow toggling it back to remove the error boundary.
-          forceErrorForFiberIDs.has(id)),
+          forceErrorForFiberIDs.get(id) === true),
       // Is this error boundary in error state.
       isErrored,
 
@@ -3619,6 +3619,7 @@ export function attach(
       // First override is added. Switch React to slower path.
       setErrorHandler(shouldErrorFiberAccordingToMap);
     }
+    console.log(id, forceError, forceErrorForFiberIDs);
 
     const fiber = idToFiberMap.get(id);
     if (fiber != null) {
