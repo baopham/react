@@ -55,7 +55,7 @@ function mountTestApp() {
   // mountHelper(InlineWarnings);
   // mountHelper(ReactNativeWeb);
   // mountHelper(Toggle);
-  // mountHelper(SuspenseTree);
+  mountHelper(SuspenseTree);
   // mountHelper(DeeplyNestedComponents);
   // mountHelper(Iframe);
   mountHelper(ErrorBoundaries);

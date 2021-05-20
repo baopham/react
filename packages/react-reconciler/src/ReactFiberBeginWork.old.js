@@ -964,7 +964,7 @@ function updateClassComponent(
         const ctor = workInProgress.type;
         const tempInstance = new ctor(workInProgress.memoizedProps, instance.context);
         const state = tempInstance.state;
-        instance.updater.enqueueReplaceState(instance, state, null);
+        instance.updater.enqueueSetState(instance, state, null);
         break;
       }
       case true: {

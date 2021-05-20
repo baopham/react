@@ -1386,6 +1386,7 @@ export function attach(
           fiberToIDMap.delete(fiber);
           idToFiberMap.delete(fiberID);
           primaryFibers.delete(fiber);
+          forceErrorForFiberIDs.delete(fiberID);
           return;
         }
 
@@ -1669,6 +1670,7 @@ export function attach(
     fiberToIDMap.delete(primaryFiber);
     idToFiberMap.delete(id);
     primaryFibers.delete(primaryFiber);
+    forceErrorForFiberIDs.delete(id);
 
     const isProfilingSupported = fiber.hasOwnProperty('treeBaseDuration');
     if (isProfilingSupported) {
@@ -3598,6 +3600,7 @@ export function attach(
       if (forceErrorForFiberIDs.size === 0) {
         // Last override is gone. Switch React back to fast path.
         setErrorHandler(shouldErrorFiberAlwaysNull);
+        console.log('FAST PATH NOW');
       }
     }
     return status;
