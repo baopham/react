@@ -12,7 +12,7 @@ export default function Suspend({children}) {
             isResolved = true;
             resolve();
           },
-          typeof window === 'object' ? 6000 : 1000
+          typeof window === 'object' ? 6000 : 10000
         );
       });
     }

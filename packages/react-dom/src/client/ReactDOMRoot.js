@@ -119,6 +119,7 @@ export function createRoot(
   container: Container,
   options?: CreateRootOptions,
 ): RootType {
+  console.log({options});
   invariant(
     isValidContainerLegacy(container),
     'createRoot(...): Target container is not a DOM element.',

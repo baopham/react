@@ -70,6 +70,7 @@ export function toggleEnabled(value: boolean): void {
 }
 
 function traceUpdates(nodes: Set<NativeType>): void {
+  console.log('TRACE UPDATE', {isEnabled});
   if (!isEnabled) {
     return;
   }

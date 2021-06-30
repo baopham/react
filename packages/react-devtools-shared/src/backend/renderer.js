@@ -4158,6 +4158,10 @@ export function attach(
     traceUpdatesEnabled = isEnabled;
   }
 
+  function handleFiberEnterHydrationStage(root): void {
+    console.log('handleFiberEnterHydrationStage', root);
+  }
+
   return {
     cleanup,
     clearErrorsAndWarnings,
@@ -4192,5 +4196,6 @@ export function attach(
     stopProfiling,
     storeAsGlobal,
     updateComponentFilters,
+    handleFiberEnterHydrationStage,
   };
 }

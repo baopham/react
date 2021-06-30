@@ -166,3 +166,18 @@ export function onCommitUnmount(fiber: Fiber) {
     }
   }
 }
+
+export function onEnterHydrationStage(fiber: Fiber) {
+  if (injectedHook && typeof injectedHook.onFiberEnterHydrationStage === 'function') {
+    try {
+      injectedHook.onFiberEnterHydrationStage(rendererID, fiber);
+    } catch (err) {
+      if (__DEV__) {
+        if (!hasLoggedError) {
+          hasLoggedError = true;
+          console.error('React instrumentation encountered an error: %s', err);
+        }
+      }
+    }
+  }
+}

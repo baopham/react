@@ -21,6 +21,8 @@ export function installHook(target: any): DevToolsHook | null {
     return null;
   }
 
+  console.log('installHook');
+
   function detectReactBuildType(renderer) {
     try {
       if (typeof renderer.version === 'string') {
@@ -157,6 +159,7 @@ export function installHook(target: any): DevToolsHook | null {
   function inject(renderer) {
     const id = ++uidCounter;
     renderers.set(id, renderer);
+    console.log('inject', {id, renderer});
 
     const reactBuildType = hasDetectedBadDCE
       ? 'deadcode'
@@ -210,6 +213,7 @@ export function installHook(target: any): DevToolsHook | null {
     // If we have just reloaded to profile, we need to inject the renderer interface before the app loads.
     // Otherwise the renderer won't yet exist and we can skip this step.
     const attach = target.__REACT_DEVTOOLS_ATTACH__;
+    console.log({attach});
     if (typeof attach === 'function') {
       const rendererInterface = attach(hook, id, renderer, target);
       hook.rendererInterfaces.set(id, rendererInterface);
@@ -294,6 +298,15 @@ export function installHook(target: any): DevToolsHook | null {
     }
   }
 
+  function onFiberEnterHydrationStage(rendererID, root) {
+    console.log('HOOK: enter hydration stage', rendererID, root);
+    const rendererInterface = rendererInterfaces.get(rendererID);
+    console.log({rendererInterface});
+    if (rendererInterface != null) {
+      rendererInterface.handleFiberEnterHydrationStage(root, priorityLevel);
+    }
+  }
+
   // TODO: More meaningful names for "rendererInterfaces" and "renderers".
   const fiberRoots = {};
   const rendererInterfaces = new Map();
@@ -323,6 +336,7 @@ export function installHook(target: any): DevToolsHook | null {
     onCommitFiberUnmount,
     onCommitFiberRoot,
     onPostCommitFiberRoot,
+    onFiberEnterHydrationStage,
   };
 
   Object.defineProperty(

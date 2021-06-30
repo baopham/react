@@ -10,6 +10,8 @@
 
 import {attach} from 'react-devtools-shared/src/backend/renderer';
 
+console.log('setting __REACT_DEVTOOLS_ATTACH__');
+
 Object.defineProperty(
   window,
   '__REACT_DEVTOOLS_ATTACH__',

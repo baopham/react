@@ -57,6 +57,7 @@ import {
 } from './ReactFiberHostConfig';
 import {enableSuspenseServerRenderer} from 'shared/ReactFeatureFlags';
 import {OffscreenLane} from './ReactFiberLane.old';
+import {onEnterHydrationStage} from './ReactFiberDevToolsHook.old';
 
 // The deepest Fiber on the stack involved in a hydration context.
 // This may have been an insertion or a hydration.
@@ -78,6 +79,9 @@ function enterHydrationState(fiber: Fiber): boolean {
   if (!supportsHydration) {
     return false;
   }
+
+  console.log('hooking hooking');
+  onEnterHydrationStage(fiber);
 
   const parentInstance = fiber.stateNode.containerInfo;
   nextHydratableInstance = getFirstHydratableChild(parentInstance);
